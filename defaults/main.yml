@@ -1,0 +1,10 @@
+---
+# defaults, place global preferences here
+apt_keys_default: []
+apt_repos_default: []
+apt_packages_default: []
+
+# group/host -specific values
+apt_keys: []
+apt_repos: []
+apt_packages: []

@@ -1,0 +1,46 @@
+---
+- name: Add APT Keys
+  apt_key:
+    data: "{{ item.data | default(omit) }}"
+    file: "{{ item.file | default(omit) }}"
+    id: "{{ item.id | default(omit) }}"
+    keyring: "{{ item.keyring | default(omit) }}"
+    keyserver: "{{ item.keyserver | default(omit) }}"
+    url: "{{ item.url | default(omit) }}"
+    validate_certs: "{{ item.validate_certs | default('yes') }}"
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - "{{ apt_keys_default }}"
+    - "{{ apt_keys }}"
+
+- name: Add APT Repo
+  apt_repository:
+    filename: "{{ item.filename | default(omit) }}"
+    mode: "{{ item.mode | default('644') }}"
+    repo: "{{ item['repo_' + ansible_distribution_release] | default('omit') }}"
+    update_cache: "{{ item.update_cache | default('yes') }}"
+    validate_certs: "{{ item.validate_certs | default('yes') }}"
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - "{{ apt_repos_default }}"
+    - "{{ apt_repos }}"
+
+- name: Manipulating APT Packages
+  apt:
+    name: "{{ item.name | default(omit) }}"
+    allow_unauthenticated: "{{ item.allow_unauthenticated | default('no') }}"
+    autoremove: "{{ item.autoremove | default(omit) }}"
+    cache_valid_time: "{{ item.cache_valid_time | default('86400') }}"
+    deb: "{{ item.deb | default(omit) }}"
+    default_release: "{{ item.default_release | default(omit) }}"
+    dpkg_options: "{{ item.dpkg_options | default('force-confdef,force-confold') }}"
+    force: "{{ item.force | default('no') }}"
+    install_recommends: "{{ item.install_recommends | default('yes') }}"
+    only_upgrade: "{{ item.only_upgrade | default(omit) }}"
+    purge: "{{ item.purge | default(omit) }}"
+    update_cache: "{{ item.update_cache | default('no') }}"
+    upgrade: "{{ item.upgrade | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - "{{ apt_packages_default }}"
+    - "{{ apt_packages }}"
